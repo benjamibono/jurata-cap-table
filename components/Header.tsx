@@ -9,7 +9,7 @@ export const Header: React.FC = () => {
           <nav className="flex items-center" role="navigation" aria-label="Main navigation">
             <Link 
               href="/companies" 
-              className="flex items-center space-x-3 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded-md p-1"
+              className="flex items-center space-x-3 p-1"
               aria-label="Jurata Cap Table Management - Home"
             >
               <JurataLogo width={120} height={24} />

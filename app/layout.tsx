@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { CompanyProvider } from '../context/CompanyContext';
@@ -20,7 +20,6 @@ export const metadata: Metadata = {
   keywords: "cap table, venture capital, portfolio management, equity tracking, shareholders, Next.js",
   authors: [{ name: "Jurata Development Team" }],
   creator: "Jurata Development Team",
-  viewport: "width=device-width, initial-scale=1",
   robots: "index, follow",
   openGraph: {
     title: "Jurata Cap Table Management Platform",
@@ -28,6 +27,11 @@ export const metadata: Metadata = {
     type: "website",
     locale: "en_US",
   },
+};
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
 };
 
 export default function RootLayout({
