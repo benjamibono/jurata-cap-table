@@ -7,7 +7,7 @@ interface CompanyCardProps {
   index?: number;
 }
 
-export const CompanyCard: React.FC<CompanyCardProps> = React.memo(({ company, index = 0 }) => {
+export const CompanyCard: React.FC<CompanyCardProps> = ({ company, index = 0 }) => {
   const totalShares = company.shareholders.reduce((sum, shareholder) => sum + shareholder.shares, 0);
   
   return (
@@ -15,7 +15,7 @@ export const CompanyCard: React.FC<CompanyCardProps> = React.memo(({ company, in
       <article 
         className="bg-white rounded-xl shadow-sm hover:shadow-lg transition-all duration-300 p-6 border border-gray-200 hover:border-jurata-primary cursor-pointer h-full flex flex-col opacity-0 animate-fade-in focus-within:ring-2 focus-within:ring-jurata-primary focus-within:ring-offset-2"
         style={{ 
-          animationDelay: `${index * 150}ms`,
+          animationDelay: `${index * 100}ms`,
           animationFillMode: 'forwards'
         }}
         aria-labelledby={`company-${company.id}-title`}
@@ -64,7 +64,7 @@ export const CompanyCard: React.FC<CompanyCardProps> = React.memo(({ company, in
         </div>
         
         <footer className="mt-4 pt-4 border-t border-gray-100">
-          <div className="flex items-center text-jurata-primary text-sm font-medium group-hover:text-jurata-primary transition-colors">
+          <div className="flex items-center text-jurata-primary text-sm font-medium transition-colors">
             <span>View cap table</span>
             <svg className="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
@@ -74,6 +74,4 @@ export const CompanyCard: React.FC<CompanyCardProps> = React.memo(({ company, in
       </article>
     </Link>
   );
-});
-
-CompanyCard.displayName = 'CompanyCard'; 
+}; 

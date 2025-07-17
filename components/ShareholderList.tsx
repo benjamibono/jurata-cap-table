@@ -14,27 +14,18 @@ export const ShareholderList: React.FC<ShareholderListProps> = ({
   onDeleteShareholder, 
   isLoading = false 
 }) => {
-  const [deletingId, setDeletingId] = useState<string | null>(null);
   const [confirmDeleteId, setConfirmDeleteId] = useState<string | null>(null);
 
   const totalShares = shareholders.reduce((sum, shareholder) => sum + shareholder.shares, 0);
-
-  // Sort shareholders by shares in descending order
   const sortedShareholders = [...shareholders].sort((a, b) => b.shares - a.shares);
 
   const handleDeleteClick = (shareholderId: string) => {
     setConfirmDeleteId(shareholderId);
   };
 
-  const handleConfirmDelete = async (shareholderId: string) => {
-    setDeletingId(shareholderId);
+  const handleConfirmDelete = (shareholderId: string) => {
     setConfirmDeleteId(null);
-    
-    try {
-      await onDeleteShareholder(shareholderId);
-    } finally {
-      setDeletingId(null);
-    }
+    onDeleteShareholder(shareholderId);
   };
 
   const handleCancelDelete = () => {
@@ -79,19 +70,19 @@ export const ShareholderList: React.FC<ShareholderListProps> = ({
         </div>
 
         <div className="overflow-x-auto">
-          <table className="w-full" role="table">
+          <table className="w-full">
             <thead className="bg-gray-50">
               <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-jurata-secondary uppercase tracking-wider" scope="col">
+                <th className="px-6 py-3 text-left text-xs font-medium text-jurata-secondary uppercase tracking-wider">
                   Name
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-jurata-secondary uppercase tracking-wider" scope="col">
+                <th className="px-6 py-3 text-left text-xs font-medium text-jurata-secondary uppercase tracking-wider">
                   Shares
                 </th>
-                <th className="hidden md:table-cell px-6 py-3 text-left text-xs font-medium text-jurata-secondary uppercase tracking-wider" scope="col">
+                <th className="hidden md:table-cell px-6 py-3 text-left text-xs font-medium text-jurata-secondary uppercase tracking-wider">
                   Percentage
                 </th>
-                <th className="px-6 py-3 text-right text-xs font-medium text-jurata-secondary uppercase tracking-wider" scope="col">
+                <th className="px-6 py-3 text-right text-xs font-medium text-jurata-secondary uppercase tracking-wider">
                   Actions
                 </th>
               </tr>
@@ -99,7 +90,6 @@ export const ShareholderList: React.FC<ShareholderListProps> = ({
             <tbody className="bg-white divide-y divide-gray-200">
               {sortedShareholders.map((shareholder) => {
                 const percentage = totalShares > 0 ? (shareholder.shares / totalShares) * 100 : 0;
-                const isDeleting = deletingId === shareholder.id;
                 
                 return (
                   <tr key={shareholder.id} className="hover:bg-gray-50 transition-colors">
@@ -125,21 +115,13 @@ export const ShareholderList: React.FC<ShareholderListProps> = ({
                     <td className="px-6 py-4 whitespace-nowrap text-right">
                       <button
                         onClick={() => handleDeleteClick(shareholder.id)}
-                        disabled={isLoading || isDeleting}
-                        className="text-red-600 hover:text-red-900 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200 p-1 rounded focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
+                        disabled={isLoading}
+                        className="text-red-600 hover:text-red-900 disabled:opacity-50 disabled:cursor-not-allowed transition-colors p-1 rounded focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
                         title={`Delete ${shareholder.name}`}
-                        aria-label={`Delete ${shareholder.name} with ${shareholder.shares} shares`}
                       >
-                        {isDeleting ? (
-                          <svg className="animate-spin w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                          </svg>
-                        ) : (
-                          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                          </svg>
-                        )}
+                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                        </svg>
                       </button>
                     </td>
                   </tr>
@@ -152,7 +134,7 @@ export const ShareholderList: React.FC<ShareholderListProps> = ({
 
       {/* Confirmation Dialog */}
       {confirmDeleteId && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50" role="dialog" aria-modal="true" aria-labelledby="delete-dialog-title">
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
           <div className="bg-white rounded-lg p-6 max-w-md w-full shadow-xl">
             <div className="flex items-center mb-4">
               <div className="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-red-100">
@@ -162,7 +144,7 @@ export const ShareholderList: React.FC<ShareholderListProps> = ({
               </div>
             </div>
             <div className="text-center">
-              <h3 id="delete-dialog-title" className="text-lg font-medium text-gray-900 mb-2">
+              <h3 className="text-lg font-medium text-gray-900 mb-2">
                 Delete Shareholder
               </h3>
               <p className="text-sm text-gray-500 mb-6">
@@ -170,7 +152,7 @@ export const ShareholderList: React.FC<ShareholderListProps> = ({
                 <span className="font-medium text-gray-900">
                   {sortedShareholders.find(s => s.id === confirmDeleteId)?.name}
                 </span>
-                ? This action cannot be undone and will recalculate all ownership percentages.
+                ? This action cannot be undone.
               </p>
             </div>
             <div className="flex space-x-3">

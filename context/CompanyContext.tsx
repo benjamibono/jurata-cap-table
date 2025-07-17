@@ -64,15 +64,13 @@ interface CompanyProviderProps {
 
 export const CompanyProvider: React.FC<CompanyProviderProps> = ({ children }) => {
   const [companies, setCompanies] = useState<Company[]>([]);
-  const [isLoaded, setIsLoaded] = useState(false);
 
-  // Function to load data from localStorage
-  const loadFromStorage = () => {
+  // Load data from localStorage on mount
+  useEffect(() => {
     const savedCompanies = localStorage.getItem('jurata-companies');
     if (savedCompanies) {
       try {
-        const parsed = JSON.parse(savedCompanies);
-        setCompanies(parsed);
+        setCompanies(JSON.parse(savedCompanies));
       } catch (error) {
         console.error('Error parsing saved companies:', error);
         setCompanies(sampleCompanies);
@@ -80,49 +78,14 @@ export const CompanyProvider: React.FC<CompanyProviderProps> = ({ children }) =>
     } else {
       setCompanies(sampleCompanies);
     }
-  };
-
-  // Load data from localStorage on mount
-  useEffect(() => {
-    loadFromStorage();
-    setIsLoaded(true);
-  }, []);
-
-  // Listen for storage changes (for external updates)
-  useEffect(() => {
-    const handleStorageChange = (e: StorageEvent) => {
-      if (e.key === 'jurata-companies' && e.newValue) {
-        try {
-          const parsed = JSON.parse(e.newValue);
-          setCompanies(parsed);
-        } catch (error) {
-          console.error('Error parsing storage change:', error);
-        }
-      }
-    };
-
-    // Listen for storage changes from other tabs/windows
-    window.addEventListener('storage', handleStorageChange);
-    
-    // Also listen for focus events to refresh data
-    const handleFocus = () => {
-      loadFromStorage();
-    };
-    
-    window.addEventListener('focus', handleFocus);
-
-    return () => {
-      window.removeEventListener('storage', handleStorageChange);
-      window.removeEventListener('focus', handleFocus);
-    };
   }, []);
 
   // Save to localStorage whenever companies change
   useEffect(() => {
-    if (isLoaded) {
+    if (companies.length > 0) {
       localStorage.setItem('jurata-companies', JSON.stringify(companies));
     }
-  }, [companies, isLoaded]);
+  }, [companies]);
 
   const addCompany = (company: Omit<Company, 'id'>) => {
     const newCompany: Company = {

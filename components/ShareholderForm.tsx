@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { CreateShareholderSchema } from '@/lib/validations';
 import { z } from 'zod';
 
@@ -10,25 +10,18 @@ interface ShareholderFormProps {
 }
 
 type FormErrors = {
-  name?: string[];
-  shares?: string[];
+  name?: string;
+  shares?: string;
   general?: string;
-};
-
-type TouchedFields = {
-  name: boolean;
-  shares: boolean;
 };
 
 export const ShareholderForm: React.FC<ShareholderFormProps> = ({ onSubmit, isLoading = false }) => {
   const [name, setName] = useState('');
   const [shares, setShares] = useState('');
   const [errors, setErrors] = useState<FormErrors>({});
-  const [touched, setTouched] = useState<TouchedFields>({ name: false, shares: false });
 
-  const validateForm = (showAllErrors = false): boolean => {
+  const validateForm = (): boolean => {
     try {
-      // Parse the form data with Zod
       const formData = {
         name: name.trim(),
         shares: parseInt(shares) || 0,
@@ -44,13 +37,7 @@ export const ShareholderForm: React.FC<ShareholderFormProps> = ({ onSubmit, isLo
         error.errors.forEach((err) => {
           const field = err.path[0] as keyof FormErrors;
           if (field === 'name' || field === 'shares') {
-            // Only show errors for touched fields unless showAllErrors is true
-            if (showAllErrors || touched[field]) {
-              if (!formErrors[field]) {
-                formErrors[field] = [];
-              }
-              formErrors[field]!.push(err.message);
-            }
+            formErrors[field] = err.message;
           }
         });
         
@@ -62,35 +49,17 @@ export const ShareholderForm: React.FC<ShareholderFormProps> = ({ onSubmit, isLo
     }
   };
 
-  // Real-time validation when fields are touched
-  useEffect(() => {
-    if (touched.name || touched.shares) {
-      validateForm(false);
-    }
-  }, [name, shares, touched]);
-
-  const handleBlur = (field: keyof TouchedFields) => {
-    setTouched(prev => ({ ...prev, [field]: true }));
-  };
-
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     
-    // Mark all fields as touched and validate
-    setTouched({ name: true, shares: true });
-    
-    if (validateForm(true)) {
+    if (validateForm()) {
       onSubmit(name.trim(), parseInt(shares));
       // Reset form
       setName('');
       setShares('');
       setErrors({});
-      setTouched({ name: false, shares: false });
     }
   };
-
-  const hasNameError = errors.name && errors.name.length > 0;
-  const hasSharesError = errors.shares && errors.shares.length > 0;
 
   return (
     <div>
@@ -111,70 +80,46 @@ export const ShareholderForm: React.FC<ShareholderFormProps> = ({ onSubmit, isLo
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
             <label htmlFor="name" className="block text-sm font-medium text-jurata-primary mb-1">
-              Name <span className="text-red-500" aria-label="required">*</span>
+              Name <span className="text-red-500">*</span>
             </label>
             <input
               type="text"
               id="name"
               value={name}
               onChange={(e) => setName(e.target.value)}
-              onBlur={() => handleBlur('name')}
               className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 transition-colors ${
-                hasNameError 
-                  ? 'border-red-500 focus:ring-red-500 focus:border-red-500' 
+                errors.name 
+                  ? 'border-red-500 focus:ring-red-500' 
                   : 'border-gray-300 focus:ring-jurata-primary focus:border-jurata-primary'
               }`}
               placeholder="Enter shareholder name"
               disabled={isLoading}
-              aria-invalid={hasNameError}
-              aria-describedby={hasNameError ? 'name-error' : undefined}
             />
-            {hasNameError && (
-              <div id="name-error" className="mt-1" role="alert">
-                {errors.name!.map((error, index) => (
-                  <p key={index} className="text-red-500 text-sm flex items-center">
-                    <svg className="w-4 h-4 mr-1 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                      <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
-                    </svg>
-                    {error}
-                  </p>
-                ))}
-              </div>
+            {errors.name && (
+              <p className="mt-1 text-red-500 text-sm">{errors.name}</p>
             )}
           </div>
           
           <div>
             <label htmlFor="shares" className="block text-sm font-medium text-jurata-primary mb-1">
-              Shares <span className="text-red-500" aria-label="required">*</span>
+              Shares <span className="text-red-500">*</span>
             </label>
             <input
               type="number"
               id="shares"
               value={shares}
               onChange={(e) => setShares(e.target.value)}
-              onBlur={() => handleBlur('shares')}
               className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 transition-colors ${
-                hasSharesError 
-                  ? 'border-red-500 focus:ring-red-500 focus:border-red-500' 
+                errors.shares 
+                  ? 'border-red-500 focus:ring-red-500' 
                   : 'border-gray-300 focus:ring-jurata-primary focus:border-jurata-primary'
               }`}
               placeholder="Enter number of shares"
               min="1"
               disabled={isLoading}
-              aria-invalid={hasSharesError}
-              aria-describedby={hasSharesError ? 'shares-error' : undefined}
             />
-            {hasSharesError && (
-              <div id="shares-error" className="mt-1" role="alert">
-                {errors.shares!.map((error, index) => (
-                  <p key={index} className="text-red-500 text-sm flex items-center">
-                    <svg className="w-4 h-4 mr-1 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                      <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
-                    </svg>
-                    {error}
-                  </p>
-                ))}
-              </div>
+            {errors.shares && (
+              <p className="mt-1 text-red-500 text-sm">{errors.shares}</p>
             )}
           </div>
         </div>
@@ -183,8 +128,7 @@ export const ShareholderForm: React.FC<ShareholderFormProps> = ({ onSubmit, isLo
           <button
             type="submit"
             disabled={isLoading}
-            className="bg-jurata-primary text-white px-6 py-3 rounded-lg hover:bg-jurata-primary hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-jurata-primary focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 font-medium flex items-center"
-            aria-describedby="submit-help"
+            className="bg-jurata-primary text-white px-6 py-3 rounded-lg hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-jurata-primary focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-opacity font-medium flex items-center"
           >
             {isLoading ? (
               <>
@@ -199,9 +143,6 @@ export const ShareholderForm: React.FC<ShareholderFormProps> = ({ onSubmit, isLo
             )}
           </button>
         </div>
-        <p id="submit-help" className="text-xs text-jurata-secondary mt-2 text-right">
-          All fields are required. Shares must be a positive whole number.
-        </p>
       </form>
     </div>
   );

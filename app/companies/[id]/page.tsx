@@ -31,7 +31,7 @@ export default function CompanyDetailPage() {
               </p>
               <Link 
                 href="/companies"
-                className="bg-jurata-primary text-white px-4 py-2 rounded-lg hover:opacity-90 transition-opacity duration-200"
+                className="bg-jurata-primary text-white px-4 py-2 rounded-lg hover:opacity-90 transition-opacity"
               >
                 Back to Companies
               </Link>
@@ -42,30 +42,16 @@ export default function CompanyDetailPage() {
     );
   }
 
-  const handleAddShareholder = async (name: string, shares: number) => {
+  const handleAddShareholder = (name: string, shares: number) => {
     setIsLoading(true);
-    try {
-      addShareholder(companyId, { name, shares });
-      // Simulate a small delay for better UX
-      await new Promise(resolve => setTimeout(resolve, 300));
-    } catch (error) {
-      console.error('Error adding shareholder:', error);
-    } finally {
-      setIsLoading(false);
-    }
+    addShareholder(companyId, { name, shares });
+    setIsLoading(false);
   };
 
-  const handleDeleteShareholder = async (shareholderId: string) => {
+  const handleDeleteShareholder = (shareholderId: string) => {
     setIsLoading(true);
-    try {
-      deleteShareholder(companyId, shareholderId);
-      // Simulate a small delay for better UX
-      await new Promise(resolve => setTimeout(resolve, 300));
-    } catch (error) {
-      console.error('Error deleting shareholder:', error);
-    } finally {
-      setIsLoading(false);
-    }
+    deleteShareholder(companyId, shareholderId);
+    setIsLoading(false);
   };
 
   const totalShares = company.shareholders.reduce((sum, shareholder) => sum + shareholder.shares, 0);
@@ -77,7 +63,7 @@ export default function CompanyDetailPage() {
         <nav className="my-8">
           <ol className="flex items-center space-x-2 text-sm">
             <li>
-              <Link href="/companies" className="text-jurata-primary hover:text-jurata-primary hover:opacity-80">
+              <Link href="/companies" className="text-jurata-primary hover:opacity-80 transition-opacity">
                 Companies
               </Link>
             </li>
