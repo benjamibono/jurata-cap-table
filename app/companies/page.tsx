@@ -24,11 +24,12 @@ export default function CompaniesPage() {
     .slice(0, 3);
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="main-container py-8">
-        <header className="my-8">
-          <h1 className="text-3xl font-bold text-jurata-primary">Portfolio Overview</h1>
-          <p className="text-jurata-secondary mt-2">
+    <div className="page-container">
+      <div className="main-container">
+        <div className="page-content">
+        <header className="page-header">
+          <h1 className="page-title">Portfolio Overview</h1>
+          <p className="page-subtitle">
             Manage cap tables across your portfolio companies
           </p>
         </header>
@@ -41,8 +42,8 @@ export default function CompaniesPage() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
                 </svg>
               </div>
-              <h2 className="text-xl font-semibold text-jurata-primary mb-2">No companies yet</h2>
-              <p className="text-jurata-secondary">
+              <h2 className="text-xl font-semibold text-primary mb-2">No companies yet</h2>
+              <p className="text-secondary">
                 Start by adding your first company to manage its cap table
               </p>
             </div>
@@ -50,30 +51,30 @@ export default function CompaniesPage() {
         ) : (
           <>
             {/* Dashboard Grid */}
-            <section className="mb-8">
+            <section className="section">
               <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
                 {/* Top Companies */}
                 <div className="card h-full opacity-0 animate-fade-in" style={{ animationDelay: '0ms', animationFillMode: 'forwards' }}>
-                  <h3 className="text-lg font-semibold text-jurata-primary mb-4">Top Companies by Share Volume</h3>
+                  <h3 className="card-title">Top Companies by Share Volume</h3>
                   <div className="space-y-3 flex-1">
                     {topCompanies.map((company, index) => (
                       <div key={company.id} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
                         <div className="flex items-center space-x-3">
-                          <div className="w-6 h-6 bg-jurata-primary text-white rounded-full flex items-center justify-center text-sm font-bold">
+                          <div className="w-6 h-6 bg-primary text-white rounded-full flex items-center justify-center text-sm font-bold">
                             {index + 1}
                           </div>
                           <div>
-                            <Link href={`/companies/${company.id}`} className="hover:text-jurata-primary transition-colors focus:outline-none focus:ring-2 focus:ring-jurata-primary focus:ring-offset-2 rounded">
-                              <div className="font-medium text-jurata-primary hover:underline">{company.name}</div>
+                            <Link href={`/companies/${company.id}`} className="hover:text-primary transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded">
+                              <div className="font-medium text-primary hover:underline">{company.name}</div>
                             </Link>
-                            <div className="text-sm text-jurata-secondary">
+                            <div className="text-sm text-secondary">
                               {company.shareholders.length} {company.shareholders.length === 1 ? 'shareholder' : 'shareholders'}
                             </div>
                           </div>
                         </div>
                         <div className="text-right">
-                          <div className="font-bold text-jurata-primary">{company.totalShares.toLocaleString()}</div>
-                          <div className="text-sm text-jurata-secondary">shares</div>
+                          <div className="font-bold text-primary">{company.totalShares.toLocaleString()}</div>
+                          <div className="text-sm text-secondary">shares</div>
                         </div>
                       </div>
                     ))}
@@ -84,15 +85,15 @@ export default function CompaniesPage() {
                 {totalShares > 0 && (
                   <div className="card h-full xl:col-span-2 opacity-0 animate-fade-in" style={{ animationDelay: '150ms', animationFillMode: 'forwards' }}>
                     <div className="flex items-center justify-between mb-6">
-                      <h3 className="text-lg font-semibold text-jurata-primary">Portfolio Distribution</h3>
+                      <h3 className="card-title mb-0">Portfolio Distribution</h3>
                       <div className="flex items-center space-x-6 text-sm">
                         <div className="text-center">
-                          <div className="font-bold text-jurata-primary">{totalCompanies}</div>
-                          <div className="text-jurata-secondary">Companies</div>
+                          <div className="font-bold text-primary">{totalCompanies}</div>
+                          <div className="text-secondary">Companies</div>
                         </div>
                         <div className="text-center">
-                          <div className="font-bold text-jurata-primary">{totalShareholders}</div>
-                          <div className="text-jurata-secondary">Stakeholders</div>
+                          <div className="font-bold text-primary">{totalShareholders}</div>
+                          <div className="text-secondary">Stakeholders</div>
                         </div>
                       </div>
                     </div>
@@ -113,9 +114,9 @@ export default function CompaniesPage() {
             </section>
 
             {/* Companies Grid */}
-            <section>
-              <h2 className="text-xl font-semibold text-jurata-primary mb-4">All Companies</h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+            <section className="section">
+              <h2 className="section-title">All Companies</h2>
+              <div className="companies-grid">
                 {companies.map((company, index) => (
                   <CompanyCard key={company.id} company={company} index={index} />
                 ))}
@@ -123,6 +124,7 @@ export default function CompaniesPage() {
             </section>
           </>
         )}
+        </div>
       </div>
     </div>
   );

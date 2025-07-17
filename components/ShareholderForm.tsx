@@ -64,10 +64,10 @@ export const ShareholderForm: React.FC<ShareholderFormProps> = ({ onSubmit, isLo
   return (
     <div>
       <div className="flex items-center space-x-2 mb-4">
-        <svg className="w-5 h-5 text-jurata-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <svg className="w-5 h-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
         </svg>
-        <h3 className="text-lg font-semibold text-jurata-primary">Add New Shareholder</h3>
+        <h3 className="text-lg font-semibold text-primary">Add New Shareholder</h3>
       </div>
       
       {errors.general && (
@@ -79,7 +79,7 @@ export const ShareholderForm: React.FC<ShareholderFormProps> = ({ onSubmit, isLo
       <form onSubmit={handleSubmit} noValidate>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
-            <label htmlFor="name" className="block text-sm font-medium text-jurata-primary mb-1">
+            <label htmlFor="name" className="block text-sm font-medium text-primary mb-1">
               Name <span className="text-red-500">*</span>
             </label>
             <input
@@ -90,7 +90,7 @@ export const ShareholderForm: React.FC<ShareholderFormProps> = ({ onSubmit, isLo
               className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 transition-colors ${
                 errors.name 
                   ? 'border-red-500 focus:ring-red-500' 
-                  : 'border-gray-300 focus:ring-jurata-primary focus:border-jurata-primary'
+                  : 'border-gray-300 focus:ring-primary focus:border-primary'
               }`}
               placeholder="Enter shareholder name"
               disabled={isLoading}
@@ -101,7 +101,7 @@ export const ShareholderForm: React.FC<ShareholderFormProps> = ({ onSubmit, isLo
           </div>
           
           <div>
-            <label htmlFor="shares" className="block text-sm font-medium text-jurata-primary mb-1">
+            <label htmlFor="shares" className="block text-sm font-medium text-primary mb-1">
               Shares <span className="text-red-500">*</span>
             </label>
             <input
@@ -112,7 +112,7 @@ export const ShareholderForm: React.FC<ShareholderFormProps> = ({ onSubmit, isLo
               className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 transition-colors ${
                 errors.shares 
                   ? 'border-red-500 focus:ring-red-500' 
-                  : 'border-gray-300 focus:ring-jurata-primary focus:border-jurata-primary'
+                  : 'border-gray-300 focus:ring-primary focus:border-primary'
               }`}
               placeholder="Enter number of shares"
               min="1"
@@ -128,7 +128,7 @@ export const ShareholderForm: React.FC<ShareholderFormProps> = ({ onSubmit, isLo
           <button
             type="submit"
             disabled={isLoading}
-            className="bg-jurata-primary text-white px-6 py-3 rounded-lg hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-jurata-primary focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-opacity font-medium flex items-center"
+                          className="bg-primary text-white px-6 py-3 rounded-lg hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-opacity font-medium flex items-center"
           >
             {isLoading ? (
               <>

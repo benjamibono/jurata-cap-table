@@ -111,10 +111,10 @@ export const PieChart: React.FC<PieChartProps> = ({
         {/* Center text for total - now fits naturally in hollow center */}
         <div className="absolute inset-0 flex items-center justify-center">
           <div className="text-center">
-            <div className="text-lg font-bold text-jurata-primary">
+            <div className="text-lg font-bold text-primary">
               {totalShares.toLocaleString()}
             </div>
-            <div className="text-xs text-jurata-secondary">Total Shares</div>
+            <div className="text-xs text-secondary">Total Shares</div>
           </div>
         </div>
       </div>
@@ -132,10 +132,10 @@ export const PieChart: React.FC<PieChartProps> = ({
                 <span className="text-gray-700 font-medium truncate">{item.name}</span>
               </div>
               <div className="flex items-center space-x-4 flex-shrink-0">
-                <span className="text-jurata-primary font-semibold">
+                <span className="text-primary font-semibold">
                   {item.value.toLocaleString()}
                 </span>
-                <span className="text-jurata-secondary font-semibold">
+                <span className="text-secondary font-semibold">
                   {item.percentage.toFixed(1)}%
                 </span>
               </div>
@@ -148,10 +148,10 @@ export const PieChart: React.FC<PieChartProps> = ({
                 <span className="text-gray-700 font-medium">Others ({data.length - 5})</span>
               </div>
               <div className="flex items-center space-x-4">
-                <span className="text-jurata-primary font-semibold">
+                <span className="text-primary font-semibold">
                   {data.slice(5).reduce((sum, item) => sum + item.value, 0).toLocaleString()}
                 </span>
-                <span className="text-jurata-secondary font-semibold">
+                <span className="text-secondary font-semibold">
                   {data.slice(5).reduce((sum, item) => sum + item.percentage, 0).toFixed(1)}%
                 </span>
               </div>
