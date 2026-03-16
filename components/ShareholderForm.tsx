@@ -34,7 +34,7 @@ export const ShareholderForm: React.FC<ShareholderFormProps> = ({ onSubmit, isLo
       if (error instanceof z.ZodError) {
         const formErrors: FormErrors = {};
         
-        error.errors.forEach((err) => {
+        error.issues.forEach((err) => {
           const field = err.path[0] as keyof FormErrors;
           if (field === 'name' || field === 'shares') {
             formErrors[field] = err.message;
